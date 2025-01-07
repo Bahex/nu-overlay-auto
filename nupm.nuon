@@ -1,0 +1,7 @@
+{
+    name: "auto-overlay"
+    type: "module"
+    license: "LICENSE"
+    description: "Developer tool to automatically reload overlay modules when they are modified."
+    version: 0.1.0
+}
