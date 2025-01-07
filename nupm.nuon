@@ -1,5 +1,5 @@
 {
-    name: "auto-overlay"
+    name: "overlay-auto"
     type: "module"
     license: "LICENSE"
     description: "Developer tool to automatically reload overlay modules when they are modified."
