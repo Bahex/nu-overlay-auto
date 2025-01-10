@@ -39,7 +39,11 @@ export def "overlay auto" [] {
 }
 
 # Add a module to the list of automatically reloaded overlays.
-export def --env "overlay auto add" [module: path] {
+export def --env "overlay auto add" [
+	module: path
+	--prefix (-p) # Prepend module name to the imported commands and aliases
+	--as: string # Rename the overlay
+] {
 	let span = (metadata $module).span
 	let module = $module | path expand --no-symlink
 	let module = if ($module | path basename) == "mod.nu" {
@@ -62,12 +66,18 @@ export def --env "overlay auto add" [module: path] {
 		return
 	}
 
+	let alias = if $as != null {
+		$' as ($as)'
+	} else {
+		''
+	}
+
 	$env.config.hooks.pre_prompt ++= [
 		{
 			type: $TYPE
 			module: $module
 			condition: {|| true}
-			code: $'overlay use -r `($module)`; overlay auto mark-fresh `($module)`'
+			code: $'overlay use --prefix=($prefix) --reload `($module)`($alias); overlay auto mark-fresh `($module)`'
 		}
 	]
 }
