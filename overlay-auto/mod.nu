@@ -11,7 +11,7 @@ const TYPE = "overlay-auto"
 
 def get_hooks []: [nothing -> list] {
 	$env.config.hooks.pre_prompt
-	| filter { try {$in.type == $TYPE}}
+	| where { try {$in.type == $TYPE}}
 }
 
 def find_hooks [module: path]: [nothing -> list] {
@@ -90,7 +90,7 @@ def "nu-complete overlay-auto-list" [] {
 # This does not unload the overlay.
 export def --env "overlay auto remove" [module: path@"nu-complete overlay-auto-list"] {
 	let hooks = find_hooks $module
-	$env.config.hooks.pre_prompt = $env.config.hooks.pre_prompt | filter {
+	$env.config.hooks.pre_prompt = $env.config.hooks.pre_prompt | where {
 		$in not-in $hooks
 	}
 }
@@ -105,7 +105,7 @@ export def --env "overlay auto mark-fresh" [module: path] {
 	let loaded = date now
 
 	let hooks = find_hooks $module
-	let rest = $env.config.hooks.pre_prompt | filter {$in not-in $hooks}
+	let rest = $env.config.hooks.pre_prompt | where {$in not-in $hooks}
 
 	let path = module_to_path $module
 	let new_hook = $hooks | first | merge { condition: {|| (ls $path).0.modified > $loaded} }
