@@ -6,6 +6,9 @@
 # not trigger a reload.
 
 use std/log
+export-env {
+	use std/log []
+}
 
 const TYPE = "overlay-auto"
 
